@@ -49,3 +49,4 @@ you can train your neural network using your data by the commands (i) and (ii).
 ## Future work
 
 - Provide a pre-trained model with a large dataset.
+- Provide a code for analyzing 3D interaction sites using obtained attention weights.
