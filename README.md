@@ -14,7 +14,7 @@ The code requires:
 
 ## Usage
 
-We provides two major scripts:
+We provide two major scripts:
 
 - code/preprocess_data.py creates the input tensor data of compound-protein interactions (CPIs)
 for processing with PyTorch from the original data
