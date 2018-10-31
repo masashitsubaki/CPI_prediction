@@ -38,7 +38,7 @@ The training results and model are saved in the output directory.
 and try to learn various models!
 
 
-## Train your CPI data
+## Train your CPI dataset
 In the directory of dataset/human/original, we now have "smiles_sequence_interaction.txt."
 If you prepare other data with the same format as "smiles_sequence_interaction.txt"
 in a new directory (e.g., dataset/yourdata/original),
