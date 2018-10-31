@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DATASET=human
+# DATASET=yourdata
 
 radius=2  # >=0.
 

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DATASET=human
+# DATASET=yourdata
 
 radius=2
 
@@ -18,7 +19,7 @@ lr=1e-3
 
 lr_decay=0.5
 
-decay_interval=3
+decay_interval=20
 
 iteration=100
 
