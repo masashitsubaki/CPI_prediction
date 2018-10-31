@@ -12,7 +12,7 @@ The code requires:
 - RDKit
 
 
-# Usage
+## Usage
 
 We provides two major scripts:
 
