@@ -1,6 +1,6 @@
 # Compound-protein Interaction Prediction
 
-This code is a simpler model and faster implementation of
+This code is a simpler model and its faster implementation of
 [Compound-protein Interaction Prediction with End-to-end Learning of Neural Networks for Graphs and Sequences (Bioinformatics, 2018)](https://academic.oup.com/bioinformatics/advance-article-abstract/doi/10.1093/bioinformatics/bty535/5050020?redirectedFrom=PDF) in PyTorch.
 
 
@@ -40,7 +40,7 @@ and try to learn various models!
 
 ## Train your CPI dataset
 In the directory of dataset/human/original, we now have "smiles_sequence_interaction.txt."
-If you prepare other data with the same format as "smiles_sequence_interaction.txt"
+If you prepare data with the same format as "smiles_sequence_interaction.txt"
 in a new directory (e.g., dataset/yourdata/original),
 you can train your neural network using your data by the commands (i) and (ii).
 
