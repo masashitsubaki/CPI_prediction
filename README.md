@@ -6,7 +6,6 @@ This code is a simpler and faster implementation of
 
 ## Requirements
 
-The code requires:
 - PyTorch (version 0.4.0)
 - scikit-learn
 - RDKit
