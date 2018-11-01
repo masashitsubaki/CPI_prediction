@@ -190,7 +190,7 @@ if __name__ == "__main__":
 
     file_model = '../output/model/' + setting
 
-    print('Epoch Time(sec) Loss AUC_dev AUC_test Precision Recall')
+    print('Epoch Time Loss AUC_dev AUC_test Precision Recall')
 
     start = timeit.default_timer()
 
