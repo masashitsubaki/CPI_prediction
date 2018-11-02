@@ -31,7 +31,7 @@ bash preprocess_data.sh
 bash run_training.sh
 ```
 
-The training results and model are saved in the output directory.
+The training result and trained model are saved in the output directory.
 
 (iii) You can change the hyperparameters in preprocess_data.sh and run_training.sh,
 and try to learn various models!
