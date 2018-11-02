@@ -18,7 +18,7 @@ We provide two major scripts:
 - code/preprocess_data.py creates the input tensor data of compound-protein interactions (CPIs)
 for processing with PyTorch from the original data
 (see dataset/human/original/smiles_sequence_interaction.txt).
-- code/run_training.py trains our neural network　using the above preprocessed data (see dataset/human/input) to predict CPIs.
+- code/run_training.py trains our neural network using the above preprocessed data (see dataset/human/input) to predict CPIs.
 
 (i) Create the tensor data of CPIs with the following command:
 ```
