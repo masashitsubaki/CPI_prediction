@@ -41,7 +41,7 @@ and try to learn various models!
 In the directory of dataset/human/original, we now have "smiles_sequence_interaction.txt."
 If you prepare data with the same format as "smiles_sequence_interaction.txt"
 in a new directory (e.g., dataset/yourdata/original),
-you can train your neural network using your data by the commands (i) and (ii).
+you can train our neural network using your data by the commands (i) and (ii).
 
 
 ## Future work
