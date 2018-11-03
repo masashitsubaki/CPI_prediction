@@ -18,7 +18,6 @@ class CompoundProteinInteractionPrediction(nn.Module):
         super(CompoundProteinInteractionPrediction, self).__init__()
         self.embed_fingerprint = nn.Embedding(n_fingerprint, dim)
         self.embed_word = nn.Embedding(n_word, dim)
-        self.W_gnn = nn.Linear(dim, dim)
         self.W_gnn = nn.ModuleList([nn.Linear(dim, dim)
                                     for _ in range(layer_gnn)])
         self.W_cnn = nn.ModuleList([nn.Conv2d(
