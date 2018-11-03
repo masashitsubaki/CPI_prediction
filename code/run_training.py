@@ -19,25 +19,27 @@ class CompoundProteinInteractionPrediction(nn.Module):
         self.embed_fingerprint = nn.Embedding(n_fingerprint, dim)
         self.embed_word = nn.Embedding(n_word, dim)
         self.W_gnn = nn.Linear(dim, dim)
-        self.W_cnn = nn.Conv2d(in_channels=1, out_channels=1,
-                               kernel_size=2*window+1, stride=1,
-                               padding=window)
+        self.W_gnn = nn.ModuleList([nn.Linear(dim, dim)
+                                    for _ in range(layer_gnn)])
+        self.W_cnn = nn.ModuleList([nn.Conv2d(
+                     in_channels=1, out_channels=1, kernel_size=2*window+1,
+                     stride=1, padding=window) for _ in range(layer_cnn)])
         self.W_attention = nn.Linear(dim, dim)
         self.W_out = nn.Linear(2*dim, 2)
 
     def gnn(self, xs, adjacency, layer_gnn):
-        for _ in range(layer_gnn):
-            hs = F.relu(self.W_gnn(xs))
+        for i in range(layer_gnn):
+            hs = F.relu(self.W_gnn[i](xs))
             xs = hs + torch.matmul(adjacency, hs)
         return torch.unsqueeze(torch.sum(xs, 0), 0)
 
-    def cnn(self, xs):
+    def cnn(self, xs, i):
         xs = torch.unsqueeze(torch.unsqueeze(xs, 0), 0)
-        return F.relu(self.W_cnn(xs))
+        return F.relu(self.W_cnn[i](xs))
 
     def attention_cnn(self, x, xs, layer_cnn):
-        for _ in range(layer_cnn):
-            hs = self.cnn(xs)
+        for i in range(layer_cnn):
+            hs = self.cnn(xs, i)
             hs = torch.squeeze(torch.squeeze(hs, 0), 0)
             weights = torch.tanh(F.linear(x, hs))
             xs = torch.t(weights) * hs
@@ -120,11 +122,11 @@ class Tester(object):
                                auc_test, precision, recall])
             f.write('\t'.join(result) + '\n')
 
-    def save(self, model, file_name):
+    def save_model(self, model, file_name):
         torch.save(model.state_dict(), file_name)
 
 
-def load_dataset(data, dtype):
+def load_tensor(data, dtype):
     return [dtype(d).to(device) for d in np.load(dir_input + data + '.npy')]
 
 
@@ -163,21 +165,22 @@ if __name__ == "__main__":
 
     dir_input = ('../dataset/' + DATASET + '/input/radius' +
                  radius + '_ngram' + ngram + '/')
-    compounds = load_dataset('compounds', torch.LongTensor)
-    adjacencies = load_dataset('adjacencies', torch.FloatTensor)
-    proteins = load_dataset('proteins', torch.LongTensor)
-    interactions = load_dataset('interactions', torch.LongTensor)
-    fingerprint_dict = load_pickle('fingerprint_dict.pickle')
-    word_dict = load_pickle('word_dict.pickle')
+    compounds = load_tensor('compounds', torch.LongTensor)
+    adjacencies = load_tensor('adjacencies', torch.FloatTensor)
+    proteins = load_tensor('proteins', torch.LongTensor)
+    interactions = load_tensor('interactions', torch.LongTensor)
 
     dataset = list(zip(compounds, adjacencies, proteins, interactions))
     dataset = shuffle_dataset(dataset, 1234)
     dataset_train, dataset_ = split_dataset(dataset, 0.8)
     dataset_dev, dataset_test = split_dataset(dataset_, 0.5)
 
+    fingerprint_dict = load_pickle('fingerprint_dict.pickle')
+    word_dict = load_pickle('word_dict.pickle')
     unknown = 100
     n_fingerprint = len(fingerprint_dict) + unknown
     n_word = len(word_dict) + unknown
+
     torch.manual_seed(1234)
     model = CompoundProteinInteractionPrediction().to(device)
     trainer = Trainer(model)
@@ -186,11 +189,11 @@ if __name__ == "__main__":
     file_result = '../output/result/' + setting + '.txt'
     with open(file_result, 'w') as f:
         f.write('Epoch\tTime(sec)\tLoss\tAUC_dev\t'
-                'AUC_test\tPrecision\tRecall\n')
+                'AUC_test\tPrecision_test\tRecall_test\n')
 
     file_model = '../output/model/' + setting
 
-    print('Epoch Time Loss AUC_dev AUC_test Precision Recall')
+    print('Epoch Time(sec) Loss AUC_dev AUC_test Precision_test Recall_test')
 
     start = timeit.default_timer()
 
@@ -208,6 +211,6 @@ if __name__ == "__main__":
 
         tester.result(epoch, time, loss_total, auc_dev,
                       auc_test, precision, recall, file_result)
-        tester.save(model, file_model)
+        tester.save_model(model, file_model)
 
         print(epoch, time, loss_total, auc_dev, auc_test, precision, recall)
