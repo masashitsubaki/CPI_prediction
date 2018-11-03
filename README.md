@@ -34,7 +34,7 @@ The training result and trained model are saved in the output directory (after t
 (iii) You can change the hyperparameters in preprocess_data.sh and run_training.sh, and try to learn various models!
 
 
-## Train our neural network using your CPI dataset
+## Training of our neural network using your CPI dataset
 In the directory of dataset/human/original, we now have "smiles_sequence_interaction.txt." If you prepare dataset with the same format as "smiles_sequence_interaction.txt" in a new directory (e.g., dataset/yourdata/original), you can train our neural network using your dataset by the above tow commands (i) and (ii).
 
 
