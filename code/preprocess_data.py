@@ -101,9 +101,8 @@ if __name__ == "__main__":
             interaction = np.array([int(interaction)])
             Interactions.append(interaction)
 
-    radius, ngram = str(radius), str(ngram)
     dir_input = ('../dataset/' + DATASET + '/input/radius' +
-                 radius + '_ngram' + ngram + '/')
+                 str(radius) + '_ngram' + str(ngram) + '/')
     if not os.path.isdir(dir_input):
         os.mkdir(dir_input)
     np.save(dir_input + 'compounds', Compounds)
