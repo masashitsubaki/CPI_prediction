@@ -9,7 +9,7 @@ ngram=3
 
 dim=10
 
-layer_gnn=2
+layer_gnn=3
 
 window=5  # The window size is 2*window+1.
 
