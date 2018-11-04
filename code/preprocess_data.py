@@ -67,7 +67,7 @@ if __name__ == "__main__":
               '/original/smiles_sequence_interaction.txt', 'r') as f:
         data_list = f.read().strip().split('\n')
 
-    """Exclude the data contains "." the smiles."""
+    """Exclude the data contains "." in the smiles."""
     data_list = list(filter(lambda x:
                      '.' not in x.strip().split()[0], data_list))
     N = len(data_list)
