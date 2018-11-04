@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
         smiles, sequence, interaction = data.strip().split()
 
-        print('/'.join(map(str, [no, N])))
+        print('/'.join(map(str, [no+1, N])))
 
         mol = Chem.MolFromSmiles(smiles)
         atoms = create_atoms(mol)
