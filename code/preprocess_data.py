@@ -66,6 +66,10 @@ if __name__ == "__main__":
     with open('../dataset/' + DATASET +
               '/original/smiles_sequence_interaction.txt', 'r') as f:
         data_list = f.read().strip().split('\n')
+
+    """Exclude the data contains "." the smiles."""
+    data_list = list(filter(lambda x:
+                     '.' not in x.strip().split()[0], data_list))
     N = len(data_list)
 
     atom_dict = defaultdict(lambda: len(atom_dict))
@@ -79,27 +83,24 @@ if __name__ == "__main__":
 
         smiles, sequence, interaction = data.strip().split()
 
-        """We exclude the data including '.' in the smiles."""
-        if ('.' not in smiles):
+        print('/'.join(map(str, [no, N])))
 
-            print('/'.join(map(str, [no, N])))
+        mol = Chem.MolFromSmiles(smiles)
+        atoms = create_atoms(mol)
 
-            mol = Chem.MolFromSmiles(smiles)
-            atoms = create_atoms(mol)
+        i_jbond_dict = create_ijbonddict(mol)
 
-            i_jbond_dict = create_ijbonddict(mol)
+        fingerprints = create_fingerprints(atoms, i_jbond_dict, radius)
+        Compounds.append(fingerprints)
 
-            fingerprints = create_fingerprints(atoms, i_jbond_dict, radius)
-            Compounds.append(fingerprints)
+        adjacency = create_adjacency(mol)
+        Adjacencies.append(adjacency)
 
-            adjacency = create_adjacency(mol)
-            Adjacencies.append(adjacency)
+        words = split_sequence(sequence, ngram)
+        Proteins.append(words)
 
-            words = split_sequence(sequence, ngram)
-            Proteins.append(words)
-
-            interaction = np.array([int(interaction)])
-            Interactions.append(interaction)
+        interaction = np.array([int(interaction)])
+        Interactions.append(interaction)
 
     dir_input = ('../dataset/' + DATASET + '/input/radius' +
                  str(radius) + '_ngram' + str(ngram) + '/')

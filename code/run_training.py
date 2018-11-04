@@ -187,12 +187,13 @@ if __name__ == "__main__":
 
     file_result = '../output/result/' + setting + '.txt'
     with open(file_result, 'w') as f:
-        f.write('Epoch\tTime(sec)\tLoss\tAUC_dev\t'
+        f.write('Epoch\tTime(sec)\tLoss_train\tAUC_dev\t'
                 'AUC_test\tPrecision_test\tRecall_test\n')
 
     file_model = '../output/model/' + setting
 
-    print('Epoch Time(sec) Loss AUC_dev AUC_test Precision_test Recall_test')
+    print('Training...')
+    print('Epoch Time(sec) Loss_train AUC_dev AUC_test Precision_test Recall_test')
 
     start = timeit.default_timer()
 
