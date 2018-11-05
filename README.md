@@ -5,7 +5,7 @@ This code is a simpler model and its faster implementation of our paper
 In this code, we use the CPI dataset of human provided in "[Improving compound–protein interaction prediction by building up highly credible negative samples (Bioinformatics, 2015).](https://academic.oup.com/bioinformatics/article/31/12/i221/216307)" Note that the ratio of positive and negative samples is 1:1.
 
 
-## Citation
+## How to cite
 
 ```
 @article{tsubaki2018compound,
