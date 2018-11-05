@@ -4,14 +4,18 @@ This code is a simpler model and its faster implementation of our paper
 "[Compound-protein Interaction Prediction with End-to-end Learning of Neural Networks for Graphs and Sequences (Bioinformatics, 2018)](https://academic.oup.com/bioinformatics/advance-article-abstract/doi/10.1093/bioinformatics/bty535/5050020?redirectedFrom=PDF)" in PyTorch.
 In this code, we use the CPI dataset of human provided in "[Improving compound–protein interaction prediction by building up highly credible negative samples (Bioinformatics, 2015).](https://academic.oup.com/bioinformatics/article/31/12/i221/216307)" Note that the ratio of positive and negative samples is 1:1.
 
+
 ## Citation
 
+```
 @article{tsubaki2018compound,
   title={Compound-protein Interaction Prediction with End-to-end Learning of Neural Networks for Graphs and Sequences},
   author={Tsubaki, Masashi and Tomii, Kentaro and Sese, Jun},
   journal={Bioinformatics},
   year={2018}
 }
+```
+
 
 ## Requirements
 
