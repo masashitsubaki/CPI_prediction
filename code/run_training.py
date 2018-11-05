@@ -1,4 +1,3 @@
-from collections import defaultdict
 import pickle
 import sys
 import timeit
@@ -29,7 +28,7 @@ class CompoundProteinInteractionPrediction(nn.Module):
     def gnn(self, xs, adjacency, layer_gnn):
         for i in range(layer_gnn):
             hs = F.relu(self.W_gnn[i](xs))
-            xs = hs + torch.matmul(adjacency, hs)
+            xs = xs + torch.matmul(adjacency, hs)
         return torch.unsqueeze(torch.sum(xs, 0), 0)
 
     def cnn(self, xs, i):
@@ -193,7 +192,8 @@ if __name__ == "__main__":
     file_model = '../output/model/' + setting
 
     print('Training...')
-    print('Epoch Time(sec) Loss_train AUC_dev AUC_test Precision_test Recall_test')
+    print('Epoch Time(sec) Loss_train AUC_dev '
+          'AUC_test Precision_test Recall_test')
 
     start = timeit.default_timer()
 
