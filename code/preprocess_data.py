@@ -80,14 +80,13 @@ if __name__ == "__main__":
     Compounds, Adjacencies, Proteins, Interactions = [], [], [], []
 
     for no, data in enumerate(data_list):
+        
+        print('/'.join(map(str, [no+1, N])))
 
         smiles, sequence, interaction = data.strip().split()
 
-        print('/'.join(map(str, [no+1, N])))
-
         mol = Chem.MolFromSmiles(smiles)
         atoms = create_atoms(mol)
-
         i_jbond_dict = create_ijbonddict(mol)
 
         fingerprints = create_fingerprints(atoms, i_jbond_dict, radius)
