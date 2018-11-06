@@ -12,7 +12,7 @@ The overview of our CPI prediction model is as follows:
 </div>
 In our paper, we propose a graph neural network (GNN) for molecules,
 which is based on learning representations of r-radius subgraphs (or called fingerprints) in molecules.
-The details of our GNN and its implementation for predicting various molecular properties are [here](https://github.com/masashitsubaki/GNN_molecules).
+The details of our GNN and its implementation for predicting various molecular properties are [here.](https://github.com/masashitsubaki/GNN_molecules)
 
 
 ## Characteristics
