@@ -20,8 +20,8 @@ https://github.com/masashitsubaki/GNN_molecules.
 
 - This code is easy to use. After setting the environment (e.g., PyTorch),
 preprocessing data and learning a model can be done by only two commands (see "Usage").
-- If you prepare data with the same format as provided in the dataset directory,
-your can learn our model with your data by the two commands
+- If you prepare dataset with the same format as provided in the dataset directory,
+your can learn our model with your dataset by the two commands
 (see "Training of our neural network using your CPI dataset").
 
 
