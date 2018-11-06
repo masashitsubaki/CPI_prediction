@@ -12,13 +12,13 @@ The overview of our CPI prediction model is as follows:
 </div>
 In our paper, we propose a graph neural network (GNN) for molecules,
 which is based on learning representations of r-radius subgraphs (or called fingerprints) in molecules.
-The details of our GNN and its implementation for predicting various molecular properties are 
-[here.](https://github.com/masashitsubaki/GNN_molecules)
+The details of our GNN and its implementation for predicting various molecular properties are
+https://github.com/masashitsubaki/GNN_molecules.
 
 
 ## Characteristics
 
-- This code is very easy to use. After setting the environment (e.g., PyTorch),
+- This code is easy to use. After setting the environment (e.g., PyTorch),
 preprocessing data and learning a model can be done by only two commands (see "Usage").
 - If you prepare data with the same format as provided in the dataset directory,
 your can learn our model with your data by the two commands
@@ -36,8 +36,10 @@ your can learn our model with your data by the two commands
 
 We provide two major scripts:
 
-- code/preprocess_data.py creates the input tensor data of compound-protein interactions (CPIs) for processing with PyTorch from the original data (see dataset/human/original/smiles_sequence_interaction.txt).
-- code/run_training.py trains our neural network using the above preprocessed data (see dataset/human/input) to predict CPIs.
+- code/preprocess_data.py creates the input tensor data of compound-protein interactions (CPIs)
+for processing with PyTorch from the original data (see dataset/human/original/smiles_sequence_interaction.txt).
+- code/run_training.py trains our neural network
+using the above preprocessed data (see dataset/human/input) to predict CPIs.
 
 (i) Create the tensor data of CPIs with the following command:
 ```
@@ -50,9 +52,10 @@ bash preprocess_data.sh
 bash run_training.sh
 ```
 
-The training result and trained model are saved in the output directory (after training, see output/result and output/model).
+The training result and trained model are saved in the output directory
+(after training, see output/result and output/model).
 
-(iii) You can change the hyperparameters in preprocess_data.sh and run_training.sh, and try to learn various models!
+(iii) You can change the hyperparameters in preprocess_data.sh and run_training.sh. Try to learn various models!
 
 
 ## Training of our neural network using your CPI dataset
