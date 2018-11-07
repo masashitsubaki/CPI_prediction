@@ -69,7 +69,22 @@ The training result and trained model are saved in the output directory
 
 
 ## Training of our neural network using your CPI dataset
-In the directory of dataset/human/original, we now have "smiles_sequence_interaction.txt." If you prepare dataset with the same format as "smiles_sequence_interaction.txt" in a new directory (e.g., dataset/yourdata/original), you can train our neural network using your dataset by the above two commands (i) and (ii).
+In the directory of dataset/human/original, we now have "smiles_sequence_interaction.txt" as follows:
+
+```
+CC[C@@]...OC)O MSPLNQ...KAS 0
+C1C...O1 MSTSSL...FLL 1
+CCCC(=O)...CC=C1 MAGAGP...QET 0
+...
+...
+...
+CC...C MKGNST...FVS 0
+C(C...O)N MSPSPT...LCS 1
+```
+
+Note that 1 means "the CP pair has interaction" and 0 means "the CP pair des not have interaction."
+If you prepare dataset with the same format in a new directory (e.g., dataset/yourdata/original),
+you can train our neural network using your dataset by the above two commands (i) and (ii).
 
 
 ## TODO
