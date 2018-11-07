@@ -49,7 +49,7 @@ We provide two major scripts:
 - code/preprocess_data.py creates the input tensor data of compound-protein interactions (CPIs)
 for processing with PyTorch from the original data (see dataset/human/original/smiles_sequence_interaction.txt).
 - code/run_training.py trains our neural network
-using the above preprocessed data (see dataset/human/input) to predict CPIs.
+using the above preprocessed data (see dataset/human/input).
 
 (i) Create the tensor data of CPIs with the following command:
 ```
@@ -65,11 +65,13 @@ bash run_training.sh
 The training result and trained model are saved in the output directory
 (after training, see output/result and output/model).
 
-(iii) You can change the hyperparameters in preprocess_data.sh and run_training.sh. Try to learn various models!
+(iii) You can change the hyperparameters in preprocess_data.sh and run_training.sh (see these scripts).
+Try to learn various models!
 
 
 ## Training of our neural network using your CPI dataset
-In the directory of dataset/human/original, we now have "smiles_sequence_interaction.txt" as follows:
+In the directory of dataset/human/original,
+we now have the original data "smiles_sequence_interaction.txt" as follows:
 
 ```
 CC[C@@]...OC)O MSPLNQ...KAS 0
@@ -82,7 +84,7 @@ CC...C MKGNST...FVS 0
 C(C...O)N MSPSPT...LCS 1
 ```
 
-Note that 1 means "the CP pair has interaction" and 0 means "the CP pair des not have interaction."
+Note that 1 means "the pair of SMILES and sequence has interaction" and 0 means "does not have interaction."
 If you prepare dataset with the same format in a new directory (e.g., dataset/yourdata/original),
 you can train our neural network using your dataset by the above two commands (i) and (ii).
 
