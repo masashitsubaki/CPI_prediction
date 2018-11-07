@@ -73,7 +73,7 @@ Try to learn various models.
 An example of training result is as follows:
 
 <div align="center">
-<p><img src="learning_curves.jpeg" width="600" /></p>
+<p><img src="learning_curve.jpeg" width="600" /></p>
 </div>
 
 This result can be reproduce by the above two commands.
