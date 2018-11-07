@@ -10,7 +10,7 @@ In the problem of CPI prediction,
 an input is the pair of a SMILES (compound) and an amino acid sequence (protein);
 an ouput is a binary label (interact or not).
 The SMILES is converted with RDKit and
-we obtain a graph of the compound (i.e., atom types and their adjacent matrix).
+we obtain a graph of the compound (i.e., atom types and their adjacency matrix).
 The overviwe of our CPI prediction approach is as follows:
 
 <div align="center">
