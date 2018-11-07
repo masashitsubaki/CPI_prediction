@@ -66,7 +66,17 @@ The training result and trained model are saved in the output directory
 (after training, see output/result and output/model).
 
 (iii) You can change the hyperparameters in preprocess_data.sh and run_training.sh (see these scripts).
-Try to learn various models!
+Try to learn various models.
+
+
+## Results
+An example of training result is as follows:
+
+<div align="center">
+<p><img src="learning_curves.jpeg" width="600" /></p>
+</div>
+
+This result can be reproduce by the above two commands.
 
 
 ## Training of our neural network using your CPI dataset
