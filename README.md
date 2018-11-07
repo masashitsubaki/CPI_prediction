@@ -71,7 +71,7 @@ Try to learn various models.
 
 ## Result
 
-An example of training result is as follows:
+An example of learning curve (x is epoch, y is AUC on the test dataset) is as follows:
 
 <div align="center">
 <p><img src="learning_curve.jpeg" width="600" /></p>
