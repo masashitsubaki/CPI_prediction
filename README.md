@@ -69,7 +69,8 @@ The training result and trained model are saved in the output directory
 Try to learn various models.
 
 
-## Results
+## Result
+
 An example of training result is as follows:
 
 <div align="center">
