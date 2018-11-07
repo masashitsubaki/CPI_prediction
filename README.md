@@ -14,7 +14,7 @@ we obtain a graph of the compound (i.e., atom types and their adjacent matrix).
 The overviwe of our CPI prediction approach is as follows:
 
 <div align="center">
-<p><img src="model.jpeg" width="500" /></p>
+<p><img src="model.jpeg" width="600" /></p>
 </div>
 
 The details of the above model are described in our paper.
