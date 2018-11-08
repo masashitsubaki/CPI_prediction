@@ -29,7 +29,7 @@ def create_ijbonddict(mol):
 
 
 def create_fingerprints(atoms, i_jbond_dict, radius):
-    """Extract the r-radius subgraphs (i.e., fingerprints)
+    """Extract r-radius subgraphs (i.e., fingerprints)
     from a molecular graph using WeisfeilerLehman-like algorithm."""
 
     if (len(atoms) == 1) or (radius == 0):
@@ -67,7 +67,7 @@ if __name__ == "__main__":
               '/original/smiles_sequence_interaction.txt', 'r') as f:
         data_list = f.read().strip().split('\n')
 
-    """Exclude the data contains "." in the smiles."""
+    """Exclude data contains "." in the smiles."""
     data_list = list(filter(lambda x:
                      '.' not in x.strip().split()[0], data_list))
     N = len(data_list)
@@ -80,7 +80,7 @@ if __name__ == "__main__":
     Compounds, Adjacencies, Proteins, Interactions = [], [], [], []
 
     for no, data in enumerate(data_list):
-        
+
         print('/'.join(map(str, [no+1, N])))
 
         smiles, sequence, interaction = data.strip().split()
@@ -103,8 +103,8 @@ if __name__ == "__main__":
 
     dir_input = ('../dataset/' + DATASET + '/input/radius' +
                  str(radius) + '_ngram' + str(ngram) + '/')
-    if not os.path.isdir(dir_input):
-        os.mkdir(dir_input)
+    os.makedirs(dir_input, exist_ok=True)
+
     np.save(dir_input + 'compounds', Compounds)
     np.save(dir_input + 'adjacencies', Adjacencies)
     np.save(dir_input + 'proteins', Proteins)

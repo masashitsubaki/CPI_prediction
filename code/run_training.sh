@@ -15,7 +15,7 @@ window=5  # The window size is 2*window+1.
 
 layer_cnn=3
 
-lr=1e-3
+lr=1e-4
 
 lr_decay=0.5
 

@@ -55,22 +55,22 @@ class CompoundProteinInteractionPrediction(nn.Module):
         x_words = self.embed_word(words)
         x_protein = self.attention_cnn(x_compound, x_words, layer_cnn)
 
-        y = torch.cat((x_compound, x_protein), 1)
-        z = self.W_out(y)
+        y_cat = torch.cat((x_compound, x_protein), 1)
+        z_interaction = self.W_out(y_cat)
 
-        return z
+        return z_interaction
 
     def __call__(self, data, train=True):
 
-        inputs, interaction = data[:-1], data[-1]
-        z = self.forward(inputs)
+        inputs, t_interaction = data[:-1], data[-1]
+        z_interaction = self.forward(inputs)
 
         if train:
-            loss = F.cross_entropy(z, interaction)
+            loss = F.cross_entropy(z_interaction, t_interaction)
             return loss
         else:
-            z = F.softmax(z, 1).to('cpu').data[0].numpy()
-            t = interaction.to('cpu').data[0].numpy()
+            z = F.softmax(z_interaction, 1).to('cpu').data[0].numpy()
+            t = t_interaction.to('cpu').data[0].numpy()
             return z, t
 
 
@@ -79,10 +79,10 @@ class Trainer(object):
         self.model = model
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr)
 
-    def train(self, dataset_train):
-        np.random.shuffle(dataset_train)
+    def train(self, dataset):
+        np.random.shuffle(dataset)
         loss_total = 0
-        for data in dataset_train:
+        for data in dataset:
             loss = self.model(data)
             self.optimizer.zero_grad()
             loss.backward()
@@ -95,10 +95,10 @@ class Tester(object):
     def __init__(self, model):
         self.model = model
 
-    def test(self, dataset_test):
+    def test(self, dataset):
 
         z_list, t_list = [], []
-        for data in dataset_test:
+        for data in dataset:
             z, t = self.model(data, train=False)
             z_list.append(z)
             t_list.append(t)
@@ -124,11 +124,11 @@ class Tester(object):
         torch.save(model.state_dict(), file_name)
 
 
-def load_tensor(data, dtype):
+def load_tensor(dir_input, data, dtype):
     return [dtype(d).to(device) for d in np.load(dir_input + data + '.npy')]
 
 
-def load_pickle(data):
+def load_pickle(dir_input, data):
     with open(dir_input + data, 'rb') as f:
         return pickle.load(f)
 
@@ -149,6 +149,7 @@ if __name__ == "__main__":
 
     (DATASET, radius, ngram, dim, layer_gnn, window, layer_cnn, lr, lr_decay,
      decay_interval, iteration, setting) = sys.argv[1:]
+
     (dim, layer_gnn, window, layer_cnn,
      decay_interval, iteration) = map(int, [dim, layer_gnn, window, layer_cnn,
                                             decay_interval, iteration])
@@ -161,20 +162,20 @@ if __name__ == "__main__":
         device = torch.device('cpu')
         print('The code uses CPU!!!')
 
-    dir_input = ('../dataset/' + DATASET + '/input/radius' +
-                 radius + '_ngram' + ngram + '/')
-    compounds = load_tensor('compounds', torch.LongTensor)
-    adjacencies = load_tensor('adjacencies', torch.FloatTensor)
-    proteins = load_tensor('proteins', torch.LongTensor)
-    interactions = load_tensor('interactions', torch.LongTensor)
+    dir_input = ('../dataset/' + DATASET + '/input/'
+                 'radius' + radius + '_ngram' + ngram + '/')
+    compounds = load_tensor(dir_input, 'compounds', torch.LongTensor)
+    adjacencies = load_tensor(dir_input, 'adjacencies', torch.FloatTensor)
+    proteins = load_tensor(dir_input, 'proteins', torch.LongTensor)
+    interactions = load_tensor(dir_input, 'interactions', torch.LongTensor)
 
     dataset = list(zip(compounds, adjacencies, proteins, interactions))
     dataset = shuffle_dataset(dataset, 1234)
     dataset_train, dataset_ = split_dataset(dataset, 0.8)
     dataset_dev, dataset_test = split_dataset(dataset_, 0.5)
 
-    fingerprint_dict = load_pickle('fingerprint_dict.pickle')
-    word_dict = load_pickle('word_dict.pickle')
+    fingerprint_dict = load_pickle(dir_input, 'fingerprint_dict.pickle')
+    word_dict = load_pickle(dir_input, 'word_dict.pickle')
     unknown = 100
     n_fingerprint = len(fingerprint_dict) + unknown
     n_word = len(word_dict) + unknown
