@@ -1,4 +1,4 @@
-# Compound-protein Interaction (CPI) Prediction on the human dataset
+# Compound-protein interaction (CPI) prediction based on a GNN for compounds and a CNN for proteins.
 
 This code is a simpler model and its faster implementation of our paper
 "[Compound-protein Interaction Prediction with End-to-end Learning of Neural Networks for Graphs and Sequences (Bioinformatics, 2018)](https://academic.oup.com/bioinformatics/advance-article-abstract/doi/10.1093/bioinformatics/bty535/5050020?redirectedFrom=PDF)" in PyTorch.
