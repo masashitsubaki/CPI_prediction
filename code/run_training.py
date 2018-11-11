@@ -114,8 +114,8 @@ class Tester(object):
         return auc, precision, recall
 
     def result(self, epoch, time, loss_total, auc_dev,
-               auc_test, precision, recall, file_result):
-        with open(file_result, 'a') as f:
+               auc_test, precision, recall, file_name):
+        with open(file_name, 'a') as f:
             result = map(str, [epoch, time, loss_total, auc_dev,
                                auc_test, precision, recall])
             f.write('\t'.join(result) + '\n')
