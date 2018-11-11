@@ -1,17 +1,17 @@
-# Compound-protein interaction (CPI) prediction using a GNN for compounds and a CNN for proteins.
+# Compound-protein interaction (CPI) prediction using a GNN for compounds and a CNN for proteins
 
 This code is a simpler model and its faster implementation of our paper
 "[Compound-protein Interaction Prediction with End-to-end Learning of Neural Networks for Graphs and Sequences (Bioinformatics, 2018)](https://academic.oup.com/bioinformatics/advance-article-abstract/doi/10.1093/bioinformatics/bty535/5050020?redirectedFrom=PDF)" in PyTorch.
-In this code, we use the CPI dataset of human provided in
+In this code, we use the CPI dataset of human and *C.elegans* provided in
 "[Improving compound–protein interaction prediction by building up highly credible negative samples (Bioinformatics, 2015).](https://academic.oup.com/bioinformatics/article/31/12/i221/216307)"
 Note that the ratio of positive and negative samples is 1:1.
 
 In the problem of CPI prediction,
 an input is the pair of a SMILES (compound) and an amino acid sequence (protein);
-an ouput is a binary label (interact or not).
+an output is a binary label (interact or not).
 The SMILES is converted with RDKit and
 we obtain a graph of the compound (i.e., atom types and their adjacency matrix).
-The overviwe of our CPI prediction approach is as follows:
+The overview of our CPI prediction approach is as follows:
 
 <div align="center">
 <p><img src="model.jpeg" width="600" /></p>
@@ -47,9 +47,9 @@ your can learn our model with your dataset by the two commands
 We provide two major scripts:
 
 - code/preprocess_data.py creates the input tensor data of compound-protein interactions (CPIs)
-for processing with PyTorch from the original data (see dataset/human/original/smiles_sequence_interaction.txt).
+for processing with PyTorch from the original data (see dataset/human or celegans/original/smiles_sequence_interaction.txt).
 - code/run_training.py trains our neural network
-using the above preprocessed data (see dataset/human/input).
+using the above preprocessed data (see dataset/human or celegans/input).
 
 (i) Create the tensor data of CPIs with the following command:
 ```
@@ -81,7 +81,7 @@ This result can be reproduce by the above two commands.
 
 
 ## Training of our neural network using your CPI dataset
-In the directory of dataset/human/original,
+In the directory of dataset/human or celegans/original,
 we now have the original data "smiles_sequence_interaction.txt" as follows:
 
 ```

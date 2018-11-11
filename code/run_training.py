@@ -70,7 +70,7 @@ class CompoundProteinInteractionPrediction(nn.Module):
             return loss
         else:
             z = F.softmax(z_interaction, 1).to('cpu').data[0].numpy()
-            t = t_interaction.to('cpu').data[0].numpy()
+            t = int(t_interaction.to('cpu').data[0].numpy())
             return z, t
 
 
@@ -107,6 +107,7 @@ class Tester(object):
         for z in z_list:
             score_list.append(z[1])
             label_list.append(np.argmax(z))
+
         auc = roc_auc_score(t_list, score_list)
         precision = precision_score(t_list, label_list)
         recall = recall_score(t_list, label_list)
@@ -114,14 +115,14 @@ class Tester(object):
         return auc, precision, recall
 
     def result(self, epoch, time, loss_total, auc_dev,
-               auc_test, precision, recall, file_name):
-        with open(file_name, 'a') as f:
+               auc_test, precision, recall, filename):
+        with open(filename, 'a') as f:
             result = map(str, [epoch, time, loss_total, auc_dev,
                                auc_test, precision, recall])
             f.write('\t'.join(result) + '\n')
 
-    def save_model(self, model, file_name):
-        torch.save(model.state_dict(), file_name)
+    def save_model(self, model, filename):
+        torch.save(model.state_dict(), filename)
 
 
 def load_tensor(dir_input, data, dtype):

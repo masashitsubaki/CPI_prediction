@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DATASET=human
+# DATASET=celegans
 # DATASET=yourdata
 
 radius=2  # >=0.
