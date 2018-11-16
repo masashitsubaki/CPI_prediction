@@ -2,7 +2,7 @@
 
 This code is a simpler model and its faster implementation of our paper
 "[Compound-protein Interaction Prediction with End-to-end Learning of Neural Networks for Graphs and Sequences (Bioinformatics, 2018)](https://academic.oup.com/bioinformatics/advance-article-abstract/doi/10.1093/bioinformatics/bty535/5050020?redirectedFrom=PDF)" in PyTorch.
-In this code, we prepare two CPI datasets of human and *C.elegans* provided in
+In this code, we prepare two CPI datasets of human and *C. elegans* provided in
 "[Improving compound–protein interaction prediction by building up highly credible negative samples (Bioinformatics, 2015).](https://academic.oup.com/bioinformatics/article/31/12/i221/216307)"
 Note that the ratio of positive and negative samples is 1:1.
 
@@ -71,13 +71,13 @@ Try to learn various models.
 
 ## Result
 
-An example of the learning curve on the human dataset (x-axis is epoch and y-axis is AUC on the test dataset) is as follows:
+Learning curves (x-axis is epoch and y-axis is AUC) on the test datasets of human and *C. elegans* are as follows:
 
 <div align="center">
 <p><img src="learning_curves.jpeg" width="800" /></p>
 </div>
 
-This result can be reproduce by the above two commands.
+These results can be reproduce by the above two commands.
 
 
 ## Training of our neural network using your CPI dataset
