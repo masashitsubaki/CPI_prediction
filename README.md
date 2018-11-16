@@ -6,11 +6,11 @@ In this code, we prepare two CPI datasets of human and *C.elegans* provided in
 "[Improving compound–protein interaction prediction by building up highly credible negative samples (Bioinformatics, 2015).](https://academic.oup.com/bioinformatics/article/31/12/i221/216307)"
 Note that the ratio of positive and negative samples is 1:1.
 
-In the problem of CPI prediction,
+In our problem setting of CPI prediction,
 an input is the pair of a SMILES (compound) and an amino acid sequence (protein);
 an output is a binary label (interact or not).
 The SMILES is converted with RDKit and
-we obtain a graph of the compound (i.e., atom types and their adjacency matrix).
+we obtain a 2D graph-structured data of the compound (i.e., atom types and its adjacency matrix).
 The overview of our CPI prediction approach is as follows:
 
 <div align="center">
@@ -20,18 +20,18 @@ The overview of our CPI prediction approach is as follows:
 The details of the above model are described in our paper.
 
 Note that, in our paper we propose a graph neural network (GNN) for molecules,
-which is based on learning representations of
-r-radius subgraphs (or called fingerprints) in molecules.
+which is based on learning representations of r-radius subgraphs (i.e., fingerprints) in molecules.
 The details of our GNN and its implementation for predicting various molecular properties
 are provided in https://github.com/masashitsubaki/GNN_molecules.
 
 
 ## Characteristics
 
-- This code is easy to use. After setting the environment (e.g., PyTorch),
-preprocessing data and learning a model can be done by only two commands (see "Usage").
-- If you prepare dataset with the same format as provided in the dataset directory,
-your can learn our model with your dataset by the two commands
+- This code is easy-to-use.
+After setting the environment (e.g., PyTorch),
+preprocessing CPI data and learning a model can be done by only two commands (see "Usage").
+- If you prepare a dataset with the same format as provided in the dataset directory,
+you can learn our model with your dataset by the two commands
 (see "Training of our neural network using your CPI dataset").
 
 

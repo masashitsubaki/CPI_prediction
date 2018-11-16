@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DATASET=human
-# DATASET=celegans
+# DATASET=human
+DATASET=celegans
 # DATASET=yourdata
 
 radius=2
@@ -20,7 +20,7 @@ lr=1e-4
 
 lr_decay=0.5
 
-decay_interval=20
+decay_interval=10
 
 iteration=100
 

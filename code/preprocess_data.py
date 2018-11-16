@@ -13,11 +13,6 @@ def create_atoms(mol):
     return np.array(atoms)
 
 
-def create_adjacency(mol):
-    adjacency = Chem.GetAdjacencyMatrix(mol)
-    return np.array(adjacency)
-
-
 def create_ijbonddict(mol):
     i_jbond_dict = defaultdict(lambda: [])
     for b in mol.GetBonds():
@@ -33,7 +28,7 @@ def create_fingerprints(atoms, i_jbond_dict, radius):
     from a molecular graph using WeisfeilerLehman-like algorithm."""
 
     if (len(atoms) == 1) or (radius == 0):
-        return np.array(atoms)
+        fingerprints = [fingerprint_dict[a] for a in atoms]
 
     else:
         vertices = atoms
@@ -44,16 +39,23 @@ def create_fingerprints(atoms, i_jbond_dict, radius):
                 fingerprint = (vertices[i], tuple(sorted(neighbors)))
                 fingerprints.append(fingerprint_dict[fingerprint])
             vertices = fingerprints
-        return np.array(fingerprints)
+
+    return np.array(fingerprints)
+
+
+def create_adjacency(mol):
+    adjacency = Chem.GetAdjacencyMatrix(mol)
+    return np.array(adjacency)
 
 
 def split_sequence(sequence, ngram):
+    sequence = '-' + sequence + '='
     words = [word_dict[sequence[i:i+ngram]]
              for i in range(len(sequence)-ngram+1)]
     return np.array(words)
 
 
-def pickle_dump(dictionary, file_name):
+def dump_dictionary(dictionary, file_name):
     with open(file_name, 'wb') as f:
         pickle.dump(dict(dictionary), f)
 
@@ -63,14 +65,14 @@ if __name__ == "__main__":
     DATASET, radius, ngram = sys.argv[1:]
     radius, ngram = map(int, [radius, ngram])
 
-    with open('../dataset/' + DATASET +
-              '/original/smiles_sequence_interaction.txt', 'r') as f:
-        data_list = f.read().strip().split('\n')
+    with open('../dataset/' + DATASET + '/original/'
+              'smiles_sequence_interaction.txt', 'r') as f:
+        cpi_list = f.read().strip().split('\n')
 
     """Exclude data contains "." in the smiles."""
-    data_list = list(filter(lambda x:
-                     '.' not in x.strip().split()[0], data_list))
-    N = len(data_list)
+    cpi_list = list(filter(lambda x:
+                    '.' not in x.strip().split()[0], cpi_list))
+    N = len(cpi_list)
 
     atom_dict = defaultdict(lambda: len(atom_dict))
     bond_dict = defaultdict(lambda: len(bond_dict))
@@ -79,11 +81,11 @@ if __name__ == "__main__":
 
     Compounds, Adjacencies, Proteins, Interactions = [], [], [], []
 
-    for no, data in enumerate(data_list):
+    for no, cpi in enumerate(cpi_list):
 
         print('/'.join(map(str, [no+1, N])))
 
-        smiles, sequence, interaction = data.strip().split()
+        smiles, sequence, interaction = cpi.strip().split()
 
         mol = Chem.MolFromSmiles(smiles)
         atoms = create_atoms(mol)
@@ -101,8 +103,8 @@ if __name__ == "__main__":
         interaction = np.array([int(interaction)])
         Interactions.append(interaction)
 
-    dir_input = ('../dataset/' + DATASET + '/input/radius' +
-                 str(radius) + '_ngram' + str(ngram) + '/')
+    dir_input = ('../dataset/' + DATASET + '/input/'
+                 'radius' + str(radius) + '_ngram' + str(ngram) + '/')
     os.makedirs(dir_input, exist_ok=True)
 
     np.save(dir_input + 'compounds', Compounds)
@@ -110,9 +112,7 @@ if __name__ == "__main__":
     np.save(dir_input + 'proteins', Proteins)
     np.save(dir_input + 'interactions', Interactions)
 
-    if (radius == 0):
-        fingerprint_dict = atom_dict
-    pickle_dump(fingerprint_dict, dir_input + 'fingerprint_dict' + '.pickle')
-    pickle_dump(word_dict, dir_input + 'word_dict' + '.pickle')
+    dump_dictionary(fingerprint_dict, dir_input + 'fingerprint_dict.pickle')
+    dump_dictionary(word_dict, dir_input + 'word_dict.pickle')
 
     print('The preprocess has finished!')

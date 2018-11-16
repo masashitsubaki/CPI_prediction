@@ -115,22 +115,22 @@ class Tester(object):
         return auc, precision, recall
 
     def result(self, epoch, time, loss_total, auc_dev,
-               auc_test, precision, recall, filename):
-        with open(filename, 'a') as f:
+               auc_test, precision, recall, file_name):
+        with open(file_name, 'a') as f:
             result = map(str, [epoch, time, loss_total, auc_dev,
                                auc_test, precision, recall])
             f.write('\t'.join(result) + '\n')
 
-    def save_model(self, model, filename):
-        torch.save(model.state_dict(), filename)
+    def save_model(self, model, file_name):
+        torch.save(model.state_dict(), file_name)
 
 
-def load_tensor(dir_input, data, dtype):
-    return [dtype(d).to(device) for d in np.load(dir_input + data + '.npy')]
+def load_tensor(file_name, dtype):
+    return [dtype(d).to(device) for d in np.load(file_name + '.npy')]
 
 
-def load_pickle(dir_input, data):
-    with open(dir_input + data, 'rb') as f:
+def load_pickle(file_name):
+    with open(file_name, 'rb') as f:
         return pickle.load(f)
 
 
@@ -165,18 +165,18 @@ if __name__ == "__main__":
 
     dir_input = ('../dataset/' + DATASET + '/input/'
                  'radius' + radius + '_ngram' + ngram + '/')
-    compounds = load_tensor(dir_input, 'compounds', torch.LongTensor)
-    adjacencies = load_tensor(dir_input, 'adjacencies', torch.FloatTensor)
-    proteins = load_tensor(dir_input, 'proteins', torch.LongTensor)
-    interactions = load_tensor(dir_input, 'interactions', torch.LongTensor)
+    compounds = load_tensor(dir_input + 'compounds', torch.LongTensor)
+    adjacencies = load_tensor(dir_input + 'adjacencies', torch.FloatTensor)
+    proteins = load_tensor(dir_input + 'proteins', torch.LongTensor)
+    interactions = load_tensor(dir_input + 'interactions', torch.LongTensor)
 
     dataset = list(zip(compounds, adjacencies, proteins, interactions))
     dataset = shuffle_dataset(dataset, 1234)
     dataset_train, dataset_ = split_dataset(dataset, 0.8)
     dataset_dev, dataset_test = split_dataset(dataset_, 0.5)
 
-    fingerprint_dict = load_pickle(dir_input, 'fingerprint_dict.pickle')
-    word_dict = load_pickle(dir_input, 'word_dict.pickle')
+    fingerprint_dict = load_pickle(dir_input + 'fingerprint_dict.pickle')
+    word_dict = load_pickle(dir_input + 'word_dict.pickle')
     unknown = 100
     n_fingerprint = len(fingerprint_dict) + unknown
     n_word = len(word_dict) + unknown
@@ -204,15 +204,15 @@ if __name__ == "__main__":
         if (epoch+1) % decay_interval == 0:
             trainer.optimizer.param_groups[0]['lr'] *= lr_decay
 
-        loss_total = trainer.train(dataset_train)
+        loss = trainer.train(dataset_train)
         auc_dev = tester.test(dataset_dev)[0]
         auc_test, precision, recall = tester.test(dataset_test)
 
         end = timeit.default_timer()
         time = end - start
 
-        tester.result(epoch, time, loss_total, auc_dev,
+        tester.result(epoch, time, loss, auc_dev,
                       auc_test, precision, recall, file_result)
         tester.save_model(model, file_model)
 
-        print(epoch, time, loss_total, auc_dev, auc_test, precision, recall)
+        print(epoch, time, loss, auc_dev, auc_test, precision, recall)
