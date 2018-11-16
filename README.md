@@ -74,7 +74,7 @@ Try to learn various models.
 An example of the learning curve on the human dataset (x-axis is epoch and y-axis is AUC on the test dataset) is as follows:
 
 <div align="center">
-<p><img src="learning_curves.jpeg" width="600" /></p>
+<p><img src="learning_curves.jpeg" width="800" /></p>
 </div>
 
 This result can be reproduce by the above two commands.
