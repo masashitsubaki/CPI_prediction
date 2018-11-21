@@ -112,7 +112,9 @@ if __name__ == "__main__":
     np.save(dir_input + 'proteins', Proteins)
     np.save(dir_input + 'interactions', Interactions)
 
+    dump_dictionary(atom_dict, dir_input + 'atom_dict.pickle')
+    dump_dictionary(bond_dict, dir_input + 'bond_dict.pickle')
     dump_dictionary(fingerprint_dict, dir_input + 'fingerprint_dict.pickle')
     dump_dictionary(word_dict, dir_input + 'word_dict.pickle')
 
-    print('The preprocess has finished!')
+    print('The preprocess of ' + DATASET + ' dataset has finished!')

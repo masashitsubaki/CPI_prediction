@@ -22,23 +22,22 @@ class CompoundProteinInteractionPrediction(nn.Module):
         self.W_cnn = nn.ModuleList([nn.Conv2d(
                      in_channels=1, out_channels=1, kernel_size=2*window+1,
                      stride=1, padding=window) for _ in range(layer_cnn)])
-        self.W_attention = nn.Linear(dim, dim)
         self.W_out = nn.Linear(2*dim, 2)
 
-    def gnn(self, xs, adjacency, layer_gnn):
-        for i in range(layer_gnn):
+    def gnn(self, xs, adjacency, layer):
+        for i in range(layer):
             hs = F.relu(self.W_gnn[i](xs))
             xs = xs + torch.matmul(adjacency, hs)
         return torch.unsqueeze(torch.sum(xs, 0), 0)
 
     def cnn(self, xs, i):
         xs = torch.unsqueeze(torch.unsqueeze(xs, 0), 0)
-        return F.relu(self.W_cnn[i](xs))
+        hs = F.relu(self.W_cnn[i](xs))
+        return torch.squeeze(torch.squeeze(hs, 0), 0)
 
-    def attention_cnn(self, x, xs, layer_cnn):
-        for i in range(layer_cnn):
+    def attention_cnn(self, x, xs, layer):
+        for i in range(layer):
             hs = self.cnn(xs, i)
-            hs = torch.squeeze(torch.squeeze(hs, 0), 0)
             weights = torch.tanh(F.linear(x, hs))
             xs = torch.t(weights) * hs
         return torch.unsqueeze(torch.sum(xs, 0), 0)
@@ -114,10 +113,10 @@ class Tester(object):
 
         return auc, precision, recall
 
-    def result(self, epoch, time, loss_total, auc_dev,
+    def result(self, epoch, time, loss, auc_dev,
                auc_test, precision, recall, file_name):
         with open(file_name, 'a') as f:
-            result = map(str, [epoch, time, loss_total, auc_dev,
+            result = map(str, [epoch, time, loss, auc_dev,
                                auc_test, precision, recall])
             f.write('\t'.join(result) + '\n')
 
@@ -151,9 +150,9 @@ if __name__ == "__main__":
     (DATASET, radius, ngram, dim, layer_gnn, window, layer_cnn, lr, lr_decay,
      decay_interval, iteration, setting) = sys.argv[1:]
 
-    (dim, layer_gnn, window, layer_cnn,
-     decay_interval, iteration) = map(int, [dim, layer_gnn, window, layer_cnn,
-                                            decay_interval, iteration])
+    (dim, layer_gnn, window, layer_cnn, decay_interval,
+     iteration) = map(int, [dim, layer_gnn, window, layer_cnn, decay_interval,
+                            iteration])
     lr, lr_decay = map(float, [lr, lr_decay])
 
     if torch.cuda.is_available():
@@ -177,9 +176,8 @@ if __name__ == "__main__":
 
     fingerprint_dict = load_pickle(dir_input + 'fingerprint_dict.pickle')
     word_dict = load_pickle(dir_input + 'word_dict.pickle')
-    unknown = 100
-    n_fingerprint = len(fingerprint_dict) + unknown
-    n_word = len(word_dict) + unknown
+    n_fingerprint = len(fingerprint_dict) + 1
+    n_word = len(word_dict) + 1
 
     torch.manual_seed(1234)
     model = CompoundProteinInteractionPrediction().to(device)
