@@ -37,7 +37,7 @@ you can learn our model with your dataset by the two commands
 
 ## Requirements
 
-- PyTorch (version 0.4.0)
+- PyTorch (>= version 0.4.0)
 - scikit-learn
 - RDKit
 
