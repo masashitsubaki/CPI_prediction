@@ -22,22 +22,25 @@ class CompoundProteinInteractionPrediction(nn.Module):
         self.W_cnn = nn.ModuleList([nn.Conv2d(
                      in_channels=1, out_channels=1, kernel_size=2*window+1,
                      stride=1, padding=window) for _ in range(layer_cnn)])
+        self.W_attention = nn.Linear(dim, dim)
         self.W_out = nn.Linear(2*dim, 2)
 
-    def gnn(self, xs, adjacency, layer):
+    def gnn(self, xs, A, layer):
         for i in range(layer):
-            hs = F.relu(self.W_gnn[i](xs))
-            xs = xs + torch.matmul(adjacency, hs)
+            hs = torch.relu(self.W_gnn[i](xs))
+            xs = xs + torch.matmul(A, hs)
         return torch.unsqueeze(torch.sum(xs, 0), 0)
 
     def cnn(self, xs, i):
         xs = torch.unsqueeze(torch.unsqueeze(xs, 0), 0)
-        hs = F.relu(self.W_cnn[i](xs))
+        hs = torch.relu(self.W_cnn[i](xs))
         return torch.squeeze(torch.squeeze(hs, 0), 0)
 
     def attention_cnn(self, x, xs, layer):
         for i in range(layer):
             hs = self.cnn(xs, i)
+            x = torch.relu(self.W_attention(x))
+            hs = torch.relu(self.W_attention(hs))
             weights = torch.tanh(F.linear(x, hs))
             xs = torch.t(weights) * hs
         return torch.unsqueeze(torch.sum(xs, 0), 0)
