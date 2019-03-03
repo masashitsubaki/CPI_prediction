@@ -98,9 +98,9 @@ CC...C MKGNST...FVS 0
 C(C...O)N MSPSPT...LCS 1
 ```
 
-Each line has "SMILES sequence interaction".
-Note that, the interaction 1 means "the pair of SMILES and sequence has interaction" and
-0 means "the pair does not have interaction."
+Each line has "SMILES sequence interaction."
+Note that, the interaction 1 means that "the pair of SMILES and sequence has interaction" and
+0 means that "the pair does not have interaction."
 If you prepare a dataset with the same format as "data.txt" in a new directory
 (e.g., dataset/yourdata/original),
 you can train our GNN-CNN using your dataset by the above two commands (i) and (ii).
