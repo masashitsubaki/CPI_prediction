@@ -9,11 +9,20 @@ from rdkit import Chem
 
 
 def create_atoms(mol):
-    atoms = [atom_dict[a.GetSymbol()] for a in mol.GetAtoms()]
+    """Create a list of atom (e.g., hydrogen and oxygen) IDs
+    considering the aromaticity."""
+    atoms = [a.GetSymbol() for a in mol.GetAtoms()]
+    for a in mol.GetAromaticAtoms():
+        i = a.GetIdx()
+        atoms[i] = (atoms[i], 'aromatic')
+    atoms = [atom_dict[a] for a in atoms]
     return np.array(atoms)
 
 
 def create_ijbonddict(mol):
+    """Create a dictionary, which each key is a node ID
+    and each value is the tuples of its neighboring node
+    and bond (e.g., single and double) IDs."""
     i_jbond_dict = defaultdict(lambda: [])
     for b in mol.GetBonds():
         i, j = b.GetBeginAtomIdx(), b.GetEndAtomIdx()
@@ -23,22 +32,37 @@ def create_ijbonddict(mol):
     return i_jbond_dict
 
 
-def create_fingerprints(atoms, i_jbond_dict, radius):
-    """Extract r-radius subgraphs (i.e., fingerprints)
-    from a molecular graph using WeisfeilerLehman-like algorithm."""
+def extract_fingerprints(atoms, i_jbond_dict, radius):
+    """Extract the r-radius subgraphs (i.e., fingerprints)
+    from a molecular graph using Weisfeiler-Lehman algorithm."""
 
     if (len(atoms) == 1) or (radius == 0):
         fingerprints = [fingerprint_dict[a] for a in atoms]
 
     else:
-        vertices = atoms
+        nodes = atoms
+        i_jedge_dict = i_jbond_dict
+
         for _ in range(radius):
+
+            """Update each node ID considering its neighboring nodes and edges
+            (i.e., r-radius subgraphs or fingerprints)."""
             fingerprints = []
-            for i, j_bond in i_jbond_dict.items():
-                neighbors = [(vertices[j], bond) for j, bond in j_bond]
-                fingerprint = (vertices[i], tuple(sorted(neighbors)))
+            for i, j_edge in i_jedge_dict.items():
+                neighbors = [(nodes[j], edge) for j, edge in j_edge]
+                fingerprint = (nodes[i], tuple(sorted(neighbors)))
                 fingerprints.append(fingerprint_dict[fingerprint])
-            vertices = fingerprints
+            nodes = fingerprints
+
+            """Also update each edge ID considering two nodes
+            on its both sides."""
+            _i_jedge_dict = defaultdict(lambda: [])
+            for i, j_edge in i_jedge_dict.items():
+                for j, edge in j_edge:
+                    both_side = tuple(sorted((nodes[i], nodes[j])))
+                    edge = edge_dict[(both_side, edge)]
+                    _i_jedge_dict[i].append((j, edge))
+            i_jedge_dict = _i_jedge_dict
 
     return np.array(fingerprints)
 
@@ -55,8 +79,8 @@ def split_sequence(sequence, ngram):
     return np.array(words)
 
 
-def dump_dictionary(dictionary, file_name):
-    with open(file_name, 'wb') as f:
+def dump_dictionary(dictionary, filename):
+    with open(filename, 'wb') as f:
         pickle.dump(dict(dictionary), f)
 
 
@@ -65,55 +89,53 @@ if __name__ == "__main__":
     DATASET, radius, ngram = sys.argv[1:]
     radius, ngram = map(int, [radius, ngram])
 
-    with open('../dataset/' + DATASET + '/original/'
-              'smiles_sequence_interaction.txt', 'r') as f:
-        cpi_list = f.read().strip().split('\n')
+    with open('../dataset/' + DATASET + '/original/data.txt', 'r') as f:
+        data_list = f.read().strip().split('\n')
 
-    """Exclude data contains "." in the smiles."""
-    cpi_list = list(filter(lambda x:
-                    '.' not in x.strip().split()[0], cpi_list))
-    N = len(cpi_list)
+    """Exclude data contains '.' in the SMILES format."""
+    data_list = [d for d in data_list if '.' not in d.strip().split()[0]]
+    N = len(data_list)
 
     atom_dict = defaultdict(lambda: len(atom_dict))
     bond_dict = defaultdict(lambda: len(bond_dict))
     fingerprint_dict = defaultdict(lambda: len(fingerprint_dict))
+    edge_dict = defaultdict(lambda: len(edge_dict))
     word_dict = defaultdict(lambda: len(word_dict))
 
-    Compounds, Adjacencies, Proteins, Interactions = [], [], [], []
+    Smiles, compounds, adjacencies, proteins, interactions = '', [], [], [], []
 
-    for no, cpi in enumerate(cpi_list):
+    for no, data in enumerate(data_list):
 
         print('/'.join(map(str, [no+1, N])))
 
-        smiles, sequence, interaction = cpi.strip().split()
+        smiles, sequence, interaction = data.strip().split()
+        Smiles += smiles + '\n'
 
-        mol = Chem.MolFromSmiles(smiles)
+        mol = Chem.AddHs(Chem.MolFromSmiles(smiles))  # Consider hydrogens.
         atoms = create_atoms(mol)
         i_jbond_dict = create_ijbonddict(mol)
 
-        fingerprints = create_fingerprints(atoms, i_jbond_dict, radius)
-        Compounds.append(fingerprints)
+        fingerprints = extract_fingerprints(atoms, i_jbond_dict, radius)
+        compounds.append(fingerprints)
 
         adjacency = create_adjacency(mol)
-        Adjacencies.append(adjacency)
+        adjacencies.append(adjacency)
 
         words = split_sequence(sequence, ngram)
-        Proteins.append(words)
+        proteins.append(words)
 
-        interaction = np.array([int(interaction)])
-        Interactions.append(interaction)
+        interactions.append(np.array([float(interaction)]))
 
     dir_input = ('../dataset/' + DATASET + '/input/'
                  'radius' + str(radius) + '_ngram' + str(ngram) + '/')
     os.makedirs(dir_input, exist_ok=True)
 
-    np.save(dir_input + 'compounds', Compounds)
-    np.save(dir_input + 'adjacencies', Adjacencies)
-    np.save(dir_input + 'proteins', Proteins)
-    np.save(dir_input + 'interactions', Interactions)
-
-    dump_dictionary(atom_dict, dir_input + 'atom_dict.pickle')
-    dump_dictionary(bond_dict, dir_input + 'bond_dict.pickle')
+    with open(dir_input + 'Smiles.txt', 'w') as f:
+        f.write(Smiles)
+    np.save(dir_input + 'compounds', compounds)
+    np.save(dir_input + 'adjacencies', adjacencies)
+    np.save(dir_input + 'proteins', proteins)
+    np.save(dir_input + 'interactions', interactions)
     dump_dictionary(fingerprint_dict, dir_input + 'fingerprint_dict.pickle')
     dump_dictionary(word_dict, dir_input + 'word_dict.pickle')
 
