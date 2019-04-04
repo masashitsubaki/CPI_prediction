@@ -18,7 +18,8 @@ The overview of our **CPI prediction by GNN-CNN** is as follows:
 </div>
 
 The details of the GNN and CNN are described in our paper.
-Note that this implementation is a simpler than the model proposed in our original paper (e.g., without edge vectors and their updates described in Eqs (5) and (6).
+Note that this implementation is a simpler than the model proposed in our original paper
+(e.g., without edge vectors and their updates described in Eqs (5) and (6)).
 
 In addition, the above CPI prediction uses our proposed GNN,
 which is based on learning representations of r-radius subgraphs (i.e., fingerprints) in molecules.
