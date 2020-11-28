@@ -1,7 +1,7 @@
 # Compound-protein interaction (CPI) prediction using a GNN for compounds and a CNN for proteins
 
 
-### _**Important: this repository will not be further developed and maintained because we have shown and believe that graph neural networks or graph convolutional networks is incorrect and useless for modeling molecules (see our paper in [NeurIPS 2020](https://proceedings.neurips.cc/paper/2020/hash/1534b76d325a8f591b52d302e7181331-Abstract.html)). Please consider switching to our new and simple machine learning model called [quantum deep field](https://github.com/masashitsubaki/QuantumDeepField_molecule).**_
+### _**Important: this repository will not be further developed and maintained because we have shown and believe that graph neural networks or graph convolutional networks are incorrect and useless for modeling molecules (see our paper in [NeurIPS 2020](https://proceedings.neurips.cc/paper/2020/hash/1534b76d325a8f591b52d302e7181331-Abstract.html)). Please consider switching to our new and simple machine learning model called [quantum deep field](https://github.com/masashitsubaki/QuantumDeepField_molecule).**_
 
 
 This code is an implementation of our paper
